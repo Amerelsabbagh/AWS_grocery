@@ -33,11 +33,21 @@ variable "my_vpc_cidr" {
 }
 
 variable "public_subnet_cidr" {
-  description = " public subnet cider"
+  description = " public subnet cidr"
   type        = string
   default     = "10.0.1.0/24"
 }
 
+variable "private_subnet_cidr_b" {
+  description = " private subnet cidr b"
+  type        = string
+  default     = "10.0.2.0/24"
+}
+variable "private_subnet_cidr_c" {
+  description = "private subnet cidr c"
+  type        = string
+  default     = "10.0.3.0/24"
+}
 variable "my_ami" {
   description = "ami"
   type        = string
@@ -45,16 +55,10 @@ variable "my_ami" {
 
 }
 
-variable "private_subnet_cidr" {
-  description = "CIDR block for second subnet"
-  type        = string
-  default     = "10.0.2.0/24"
-}
-
 variable "db_name" {
   description = "PostgreSQL database name"
   type        = string
-  default     = "grocerydb"
+  default     = "grocerymate_db"
 }
 variable "db_username" {
   description = "PostgreSQL master username"
@@ -66,4 +70,44 @@ variable "db_password" {
   description = "PostgreSQL master password"
   type        = string
   sensitive   = true
+}
+variable "db_engine" {
+  description = "Database engine for RDS"
+  type        = string
+  default     = "postgres"
+}
+variable "db_instance_class" {
+  description = "RDS instance class"
+  type        = string
+  default     = "db.t3.micro"
+}
+
+variable "db_allocated_storage" {
+  description = "Initial allocated storage for RDS (GB)"
+  type        = number
+  default     = 20
+}
+
+variable "db_max_allocated_storage" {
+  description = "Maximum storage for autoscaling (GB)"
+  type        = number
+  default     = 100
+}
+
+variable "db_publicly_accessible" {
+  description = "Whether the RDS instance is publicly accessible"
+  type        = bool
+  default     = false
+}
+
+variable "db_skip_final_snapshot" {
+  description = "Skip final snapshot on RDS deletion"
+  type        = bool
+  default     = true
+}
+
+variable "db_storage_encrypted" {
+  description = "Enable storage encryption for RDS"
+  type        = bool
+  default     = true
 }

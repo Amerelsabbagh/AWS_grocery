@@ -24,15 +24,19 @@ resource "aws_vpc" "my_vpc" {
 }
 
 resource "aws_subnet" "my_public_subnet" {
-  vpc_id                  = aws_vpc.my_vpc.id
-  cidr_block              = var.public_subnet_cidr
-  map_public_ip_on_launch = true
-  availability_zone       = "${var.aws_region}a"
+  vpc_id            = aws_vpc.my_vpc.id
+  cidr_block        = var.public_subnet_cidr
+  availability_zone = "${var.aws_region}a"
   tags = {
-    Name = "${var.project_name}-public-subnet"
+    Name = "${var.project_name}-public-subnet-a"
   }
 }
-
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.my_vpc.id
+  tags = {
+    Name = "my-terraform-internet-gateway"
+  }
+}
 resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.my_vpc.id
 
@@ -52,29 +56,27 @@ resource "aws_route_table_association" "public_subnet_assoc" {
 }
 
 
-resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.my_vpc.id
-  tags = {
-    Name = "my-terraform-internet-gateway"
-  }
-}
-resource "aws_subnet" "private_subnet_a" {
-  vpc_id            = aws_vpc.my_vpc.id
-  cidr_block        = "10.0.2.0/24"
-  availability_zone = "eu-central-1a"
-
-  tags = {
-    Name = "${var.project_name}-private-subnet-a"
-  }
-}
-
 resource "aws_subnet" "private_subnet_b" {
   vpc_id            = aws_vpc.my_vpc.id
-  cidr_block        = "10.0.3.0/24"
-  availability_zone = "eu-central-1b"
+  cidr_block        = var.private_subnet_cidr_b
+  availability_zone = "${var.aws_region}b"
+  # cidr_block        = "10.0.2.0/24"
+  # availability_zone = "eu-central-1a"
 
   tags = {
     Name = "${var.project_name}-private-subnet-b"
+  }
+}
+
+resource "aws_subnet" "private_subnet_c" {
+  vpc_id            = aws_vpc.my_vpc.id
+  cidr_block        = var.private_subnet_cidr_c
+  availability_zone = "${var.aws_region}c"
+  # cidr_block        = "10.0.3.0/24"
+  # availability_zone = "eu-central-1b"
+
+  tags = {
+    Name = "${var.project_name}-private-subnet-c"
   }
 }
 resource "aws_security_group" "ec2_sg" {
@@ -143,8 +145,8 @@ resource "aws_security_group" "rds_sg" {
 resource "aws_db_subnet_group" "rds_subnet_group" {
   name = "${var.project_name}-rds-subnet-group"
   subnet_ids = [
-    aws_subnet.private_subnet_a.id,
-    aws_subnet.private_subnet_b.id
+    aws_subnet.private_subnet_b.id,
+    aws_subnet.private_subnet_c.id
   ]
 
   tags = {
@@ -161,9 +163,11 @@ resource "aws_instance" "app_server" {
   vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
   key_name                    = var.key_name
   iam_instance_profile        = aws_iam_instance_profile.ec2_profile.name
-
+  user_data_replace_on_change = true
   user_data = templatefile("${path.module}/userdata.sh", {
-    RDS_ENDPOINT = aws_db_instance.postgres_db.address
+    RDS_ENDPOINT        = aws_db_instance.postgres_db.address
+    RDS_MASTER_USER     = var.db_username
+    RDS_MASTER_PASSWORD = var.db_password
   })
 
   tags = {
@@ -173,17 +177,16 @@ resource "aws_instance" "app_server" {
 
 resource "aws_db_instance" "postgres_db" {
   identifier             = "${var.project_name}-postgres-db"
-  engine                 = "postgres"
-  instance_class         = "db.t3.micro"
-  allocated_storage      = 20
-  max_allocated_storage  = 100
+  engine                 = var.db_engine
+  instance_class         = var.db_instance_class
+  allocated_storage      = var.db_allocated_storage
+  max_allocated_storage  = var.db_max_allocated_storage
   db_name                = var.db_name
   username               = var.db_username
   password               = var.db_password
-  port                   = 5432
-  publicly_accessible    = false
-  skip_final_snapshot    = true
-  storage_encrypted      = true
+  publicly_accessible    = var.db_publicly_accessible
+  skip_final_snapshot    = var.db_skip_final_snapshot
+  storage_encrypted      = var.db_storage_encrypted
   db_subnet_group_name   = aws_db_subnet_group.rds_subnet_group.name
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
 
