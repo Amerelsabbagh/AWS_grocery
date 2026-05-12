@@ -28,9 +28,9 @@ This document describes the GroceryMate AWS infrastructure managed with Terrafor
 
 \- \*\*VPC\*\*
 
-&#x20; - CIDR: `10.0.0.0/16`
+&#x20;   - CIDR: `10.0.0.0/16`
 
-&#x20; - DNS support and hostnames enabled.
+&#x20;   - DNS support and hostnames enabled.
 
 
 
