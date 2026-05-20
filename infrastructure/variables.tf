@@ -111,3 +111,7 @@ variable "db_storage_encrypted" {
   type        = bool
   default     = true
 }
+variable "alert_email" {
+  description = "Email address for CloudWatch alerts"
+  type        = string
+}
