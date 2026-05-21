@@ -6,3 +6,11 @@ venv/
 
 terraform.*
 .terraform.*
+
+infrastructure/.terraform/
+infrastructure/*.tfstate
+infrastructure/*.tfstate.*
+infrastructure/crash.log
+infrastructure/*.tfvars
+infrastructure/*.tfvars.json
+infrastructure/.terraform.lock.hcl
