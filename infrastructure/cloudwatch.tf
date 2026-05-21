@@ -29,7 +29,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_high_cpu" {
   }
 
   alarm_actions = [aws_sns_topic.alerts.arn]
-  ok_actions    = [aws_sns_topic.alerts.arn]
+
 }
 
 # =========================
@@ -50,7 +50,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_status_check" {
   }
 
   alarm_actions = [aws_sns_topic.alerts.arn]
-  ok_actions    = [aws_sns_topic.alerts.arn]
+
 }
 
 # =========================
@@ -72,5 +72,5 @@ resource "aws_cloudwatch_metric_alarm" "rds_high_cpu" {
   }
 
   alarm_actions = [aws_sns_topic.alerts.arn]
-  ok_actions    = [aws_sns_topic.alerts.arn]
+
 }
