@@ -1,349 +1,443 @@
-# GroceryMate
+# 🏗️ GroceryMate – AWS Terraform Infrastructure
 
-[Für das deutsche ReadMe hier klicken](#grocerymate-deutsch)
-
-## 🏆 GroceryMate E-Commerce Platform
-
-[![Python](https://img.shields.io/badge/Language-Python%2C%20JavaScript-blue)](https://www.python.org/)
-[![OS](https://img.shields.io/badge/OS-Linux%2C%20Windows%2C%20macOS-green)](https://www.kernel.org/)
-[![Database](https://img.shields.io/badge/Database-PostgreSQL-336791)](https://www.postgresql.org/)
-[![GitHub Release](https://img.shields.io/github/v/release/AlejandroRomanIbanez/AWS_grocery)](https://github.com/AlejandroRomanIbanez/AWS_grocery/releases/tag/v2.0.0)
-[![Free](https://img.shields.io/badge/Free_for_Non_Commercial_Use-brightgreen)](#-license)
-
-⭐ **Star us on GitHub** — it motivates us a lot!
+![Terraform](https://img.shields.io/badge/Terraform-≥1.5-7B42BC?style=flat&logo=terraform)
+![AWS](https://img.shields.io/badge/AWS-Cloud-FF9900?style=flat&logo=amazonaws)
+![Docker](https://img.shields.io/badge/Docker-Container-2496ED?style=flat&logo=docker)
+![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-336791?style=flat&logo=postgresql)
+![Region](https://img.shields.io/badge/Region-eu--central--1-orange?style=flat)
 
 ---
 
 ## 📌 Table of Contents
 
-- [Overview](#-overview)
-- [Features](#-features)
-- [Screenshots & Demo](#-screenshots--demo)
-- [Prerequisites](#-prerequisites)
-- [Installation](#-installation)
-  - [Clone Repository](#-clone-repository)
-  - [Configure PostgreSQL](#-configure-postgresql)
-  - [Populate Database](#-populate-database)
-  - [Set Up Python Environment](#-set-up-python-environment)
-  - [Set Environment Variables](#-set-environment-variables)
-  - [Start the Application](#-start-the-application)
-- [Usage](#-usage)
-- [Contributing](#-contributing)
-- [License](#-license)
-
-## 🚀 Overview
-
-GroceryMate is an application developed as part of the Masterschools program by **Alejandro Roman Ibanez**. It is a modern, full-featured e-commerce platform designed for seamless online grocery shopping. It provides an intuitive user interface and a secure backend, allowing users to browse products, manage their shopping basket, and complete purchases efficiently.
-
-GroceryMate is a modern, full-featured e-commerce platform designed for seamless online grocery shopping. It provides an intuitive user interface and a secure backend, allowing users to browse products, manage their shopping basket, and complete purchases efficiently.
-
-## 🛒 Features
-
-- **🛡️ User Authentication**: Secure registration, login, and session management.
-- **🔒 Protected Routes**: Access control for authenticated users.
-- **🔎 Product Search & Filtering**: Browse products, apply filters, and sort by category or price.
-- **⭐ Favorites Management**: Save preferred products.
-- **🛍️ Shopping Basket**: Add, view, modify, and remove items.
-- **💳 Checkout Process**:
-  - Secure billing and shipping information handling.
-  - Multiple payment options.
-  - Automatic total price calculation.
-
-## 📸 Screenshots & Demo
-
-![imagen](https://github.com/user-attachments/assets/ea039195-67a2-4bf2-9613-2ee1e666231a)
-![imagen](https://github.com/user-attachments/assets/a87e5c50-5a9e-45b8-ad16-2dbff41acd00)
-![imagen](https://github.com/user-attachments/assets/589aae62-67ef-4496-bd3b-772cd32ca386)
-![imagen](https://github.com/user-attachments/assets/2772b85e-81f7-446a-9296-4fdc2b652cb7)
-
-https://github.com/user-attachments/assets/d1c5c8e4-5b16-486a-b709-4cf6e6cce6bc
-
-## 📋 Prerequisites
-
-Ensure the following dependencies are installed before running the application:
-
-- **🐍 Python (>=3.11)**
-- **🐘 PostgreSQL** – Database for storing product and user information.
-- **🛠️ Git** – Version control system.
-
-## ⚙️ Installation
-
-### 🔹 Clone Repository
-
-```sh
-git clone --branch version2 https://github.com/AlejandroRomanIbanez/AWS_grocery.git && cd AWS_grocery
-```
-
-### 🔹 Configure PostgreSQL
-
-Before creating the database user, you can choose a custom username and password to enhance security. Replace `<your_secure_password>` with a strong password of your choice in the following commands.
-
-Create database and user:
-
-```sh
-psql -U postgres -c "CREATE DATABASE grocerymate_db;"
-psql -U postgres -c "CREATE USER grocery_user WITH ENCRYPTED PASSWORD '<your_secure_password>';"  # Replace <your_secure_password> with a strong password of your choice
-psql -U postgres -c "ALTER USER grocery_user WITH SUPERUSER;"
-```
-
-### 🔹 Populate Database
-
-```sh
-psql -U grocery_user -d grocerymate_db -f backend/app/sqlite_dump_clean.sql
-```
-
-Verify insertion:
-
-```sh
-psql -U grocery_user -d grocerymate_db -c "SELECT * FROM users;"
-psql -U grocery_user -d grocerymate_db -c "SELECT * FROM products;"
-```
-
-### 🔹 Set Up Python Environment
-
-
-Install dependencies in an activated virtual Enviroment:
-
-```sh
-cd backend
-pip install -r requirements.txt
-```
-OR (if pip doesn't exist)
-```sh
-pip3 install -r requirements.txt
-```
-
-### 🔹 Set Environment Variables
-
-Create a `.env` file:
-
-```sh
-touch .env  # macOS/Linux
-ni .env -Force  # Windows
-```
-
-Generate a secure JWT key:
-
-```sh
-python3 -c "import secrets; print(secrets.token_hex(32))"
-```
-
-Update `.env`:
-
-```sh
-nano .env
-```
-
-Fill in the following information (make sure to replace the placeholders):
-
-```ini
-JWT_SECRET_KEY=<your_generated_key>
-POSTGRES_USER=grocery_user
-POSTGRES_PASSWORD=<your_password>
-POSTGRES_DB=grocerymate_db
-POSTGRES_HOST=localhost
-POSTGRES_URI=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}
-```
-
-### 🔹 Start the Application
-
-```sh
-python3 run.py
-```
-
-## 📖 Usage
-
-- Access the application at [http://localhost:5000](http://localhost:5000)
-- Register/Login to your account
-- Browse and search for products
-- Manage favorites and shopping basket
-- Proceed through the checkout process
-
-## 🤝 Contributing
-
-We welcome contributions! Please follow these steps:
-
-1. Fork the repository.
-2. Create a new feature branch (`feature/your-feature`).
-3. Implement your changes and commit them.
-4. Push your branch and create a pull request.
-
-## 📜 License
-
-This project is licensed under the MIT License.
-
-# GroceryMate Deutsch
-
-## 🏆 GroceryMate E-Commerce-Plattform
-
-[![Python](https://img.shields.io/badge/Language-Python%2C%20JavaScript-blue)](https://www.python.org/)
-[![OS](https://img.shields.io/badge/OS-Linux%2C%20Windows%2C%20macOS-green)](https://www.kernel.org/)
-[![Database](https://img.shields.io/badge/Database-PostgreSQL-336791)](https://www.postgresql.org/)
-[![GitHub Release](https://img.shields.io/github/v/release/AlejandroRomanIbanez/AWS_grocery)](https://github.com/AlejandroRomanIbanez/AWS_grocery/releases/tag/v2.0.0)
-[![Free](https://img.shields.io/badge/Free_for_Non_Commercial_Use-brightgreen)](#-license)
-
-⭐ **Gib uns einen Stern auf GitHub** — das motiviert uns sehr!
+- [Overview](#overview)
+- [Architecture Diagram](#architecture-diagram)
+- [Architecture Overview](#architecture-overview)
+- [Folder Structure](#folder-structure)
+- [EC2 Bootstrapping](#ec2-bootstrapping-userdatash)
+- [Terraform Usage](#terraform-usage)
+  - [Prerequisites](#1-prerequisites)
+  - [Configure terraform.tfvars](#2-configure-terraformtfvars)
+  - [Initialize and Apply](#3-initialize-and-apply)
+- [Accessing the Application](#accessing-the-application)
+- [Manual Recovery Guide](#manual-recovery-guide)
+- [RDS and Data Seeding](#rds-and-data-seeding)
+- [S3 Avatars Bucket](#s3-avatars-bucket)
+- [CloudWatch Monitoring and Alerts](#cloudwatch-monitoring-and-alerts)
+- [Destroying the Stack](#destroying-the-stack)
 
 ---
 
-## 📌 Inhaltsverzeichnis
+## 🚀 Overview
 
-- [Übersicht](#ubersicht)
-- [Funktionen](#-funktionen)
-- [Bildschirmfotos & Demo](#-Bildschirmfotos--Demo)
-- [Voraussetzungen](#-Voraussetzungen)
-- [Installationsanleitung](#-Installationsanleitung)
-  - [Repository klonen](#-Repository-klonen)
-  - [PostgreSQL konfigurieren](#-PostgreSQL-konfigurieren)
-  - [Datenbank befüllen](#-Datenbank-befüllen)
-  - [Python-Umgebung einrichten](#-Python-Umgebung-einrichten)
-  - [Umgebungsvariablen setzen](#-Umgebungsvariablen-setzen)
-  - [Anwendung starten](#-Anwendung-starten)
-- [Benutzung](#-Benutzung)
-- [Mitwirken](#-Mitwirken)
-- [Lizenz](#-Lizenz)
+This document describes the **GroceryMate AWS infrastructure** managed with Terraform.
+It lives under the `infrastructure/` folder and covers:
 
-## 🚀 Übersicht
+- VPC, subnets, and networking
+- EC2 app server with Docker
+- RDS PostgreSQL (private subnets)
+- S3 bucket for user avatars
+- IAM role and instance profile
+- EC2 user data bootstrapping (DB seeding + Docker run)
+- CloudWatch alarms and SNS email alerts
 
-GroceryMate ist eine Anwendung, die im Rahmen des Masterschools-Programms von **Alejandro Roman Ibanez** entwickelt wurde. Es handelt sich um eine moderne, voll ausgestattete E-Commerce-Plattform für ein nahtloses Online-Lebensmittelshopping. Sie bietet eine intuitive Benutzeroberfläche und ein sicheres Backend, mit dem Nutzer Produkte durchsuchen, ihren Warenkorb verwalten und Einkäufe effizient abschließen können.
 
-GroceryMate ist eine moderne, voll ausgestattete E-Commerce-Plattform für ein nahtloses Online-Lebensmittelshopping. Sie bietet eine intuitive Benutzeroberfläche und ein sicheres Backend, mit dem Nutzer Produkte durchsuchen, ihren Warenkorb verwalten und Einkäufe effizient abschließen können.
+---
 
-## 🛒 Funktionen
+## 🗺️ Architecture Diagram
 
-- **🛡️ Benutzerauthentifizierung**: Sichere Registrierung, Anmeldung und Sitzungsverwaltung.
-- **🔒 Geschützte Routen**: Zugriffskontrolle für authentifizierte Nutzer.
-- **🔎 Produktsuche & Filter**: Produkte durchsuchen, Filter anwenden und nach Kategorie oder Preis sortieren.
-- **⭐ Favoritenverwaltung**: Bevorzugte Produkte speichern.
-- **🛍️ Warenkorb**: Artikel hinzufügen, anzeigen, ändern und entfernen.
-- **💳 Checkout-Prozess**:
-  - Sichere Verarbeitung von Rechnungs- und Lieferinformationen.
-  - Mehrere Zahlungsoptionen.
-  - Automatische Berechnung des Gesamtpreises.
+![GroceryMate AWS architecture](architecture.png)
 
-## 📸 Bildschirmfotos & Demo
+---
 
-![imagen](https://github.com/user-attachments/assets/ea039195-67a2-4bf2-9613-2ee1e666231a)
-![imagen](https://github.com/user-attachments/assets/a87e5c50-5a9e-45b8-ad16-2dbff41acd00)
-![imagen](https://github.com/user-attachments/assets/589aae62-67ef-4496-bd3b-772cd32ca386)
-![imagen](https://github.com/user-attachments/assets/2772b85e-81f7-446a-9296-4fdc2b652cb7)
+## 🏛️ Architecture Overview
 
-https://github.com/user-attachments/assets/d1c5c8e4-5b16-486a-b709-4cf6e6cce6bc
+> 💡 **How to read this section:**
+> Think of the architecture as layers. The VPC is the private network boundary. Inside it, the EC2 instance is the only thing exposed to the internet. The RDS database sits in private subnets — it can only be reached from the EC2 instance, never directly from the internet.
 
-## 📋 Voraussetzungen
+- 🔷 **VPC (Virtual Private Cloud)**
+  - CIDR: `10.0.0.0/16` — the private network has IP addresses from `10.0.0.0` to `10.0.255.255`
+  - DNS support and hostnames enabled so resources can reach each other by name
 
-Stelle sicher, dass die folgenden Abhängigkeiten installiert sind, bevor du die Anwendung ausführst:
+- 🌐 **Subnets**
+  - Public subnet `10.0.1.0/24` in `eu-central-1a` → EC2 app server (internet-facing)
+  - Private subnet `10.0.2.0/24` in `eu-central-1b` → RDS (no internet access)
+  - Private subnet `10.0.3.0/24` in `eu-central-1c` → RDS (second AZ for high availability requirement)
 
-- **🐍 Python (>=3.11)**
-- **🐘 PostgreSQL** – Datenbank zur Speicherung von Produkt- und Benutzerinformationen.
-- **🛠️ Git** – Versionskontrollsystem.
+- 🔗 **Networking**
+  - Internet Gateway (IGW) — the door between the VPC and the public internet
+  - Public route table: `0.0.0.0/0 → IGW` — all outbound traffic from the public subnet goes through the IGW
 
-## ⚙️ Installationsanleitung
+- 🔒 **Security Groups** — act like firewalls; they control which traffic is allowed in and out
+  - `ec2_sg`:
+    - Inbound: SSH `22` from `my_ip` only, HTTP `80` and app port `5000` from anywhere
+    - Outbound: all traffic allowed
+  - `rds_sg`:
+    - Inbound: PostgreSQL `5432` from `ec2_sg` only — only the EC2 instance can connect to the database
+    - Outbound: all traffic allowed
 
-### 🔹 Repository klonen
+- 🖥️ **EC2 App Server**
+  - AMI: Amazon Linux 2023 — the operating system image used to create the server
+  - Instance type: `t3.micro` — 2 vCPU, 1 GB RAM (free tier eligible)
+  - Launched in public subnet with a public IP so users can reach the app
+  - IAM instance profile: `grocery-ec2-profile` — gives the EC2 permission to read/write S3 without needing AWS keys in the code
 
-```sh
-git clone --branch version2 https://github.com/AlejandroRomanIbanez/AWS_grocery.git && cd AWS_grocery
+- 🗄️ **RDS PostgreSQL**
+  - Engine: `postgres` — managed PostgreSQL database service by AWS
+  - Instance class: `db.t3.micro` — small instance, sufficient for development
+  - Storage: 20 GB (auto-scales to 100 GB if needed)
+  - Not publicly accessible — can only be reached from within the VPC
+  - Deployed across two private subnets via DB subnet group — AWS requires at least two AZs for RDS
+  - Master user: `postgres` / configured via `var.db_password`
+
+- 🪣 **S3 (Simple Storage Service)**
+  - Bucket: `grocerymate-avatars-70223957`
+  - Stores user avatar images under `avatars/` prefix
+  - Versioning enabled — keeps old versions of files if overwritten
+  - Public access blocked — files are only accessible through the application
+  - Bucket policy: EC2 IAM role can `ListBucket`, `GetObject`, `PutObject`
+
+- 🐳 **App Container**
+  - Repo: `https://github.com/Amerelsabbagh/AWS_grocery` (branch `version2`)
+  - Docker image built from `backend/Dockerfile`
+  - Container listens on port `5000`
+
+- 📊 **CloudWatch + SNS**
+  - Three alarms monitor EC2 CPU, EC2 status checks, and RDS CPU
+  - Alerts are sent by email via SNS when thresholds are breached
+
+---
+
+## 📁 Folder Structure
+
+| File | Purpose |
+|---|---|
+| `main.tf` | VPC, subnets, security groups, EC2, RDS, DB subnet group |
+| `variables.tf` | Input variables (region, instance type, CIDRs, DB settings) |
+| `iam-role.tf` | EC2 IAM role and instance profile with S3 access |
+| `s3.tf` | S3 bucket, versioning, public access block, bucket policy |
+| `cloudwatch.tf` | CloudWatch alarms and SNS email alerts |
+| `outputs.tf` | EC2 public IP/DNS and RDS endpoint outputs |
+| `userdata.sh` | EC2 bootstrap script: installs Docker, seeds DB, runs container |
+| `terraform.tfvars` | Environment values (region, key pair, `my_ip`, `db_password`) |
+| `architecture.png` | AWS infrastructure architecture diagram |
+
+> 💡 **What is `terraform.tfvars`?**
+> This file holds the actual values for variables defined in `variables.tf`. Think of `variables.tf` as declaring what inputs exist, and `terraform.tfvars` as filling in those inputs for your specific environment. This file is **gitignored** because it contains sensitive values like passwords.
+
+---
+
+## ⚙️ EC2 Bootstrapping (userdata.sh)
+
+> 💡 **What is user data?**
+> When AWS launches an EC2 instance, you can provide a shell script called "user data" that runs automatically on first boot as root. This is how we automate the entire server setup without manually SSHing in.
+
+On first boot, EC2 automatically runs `userdata.sh` which:
+
+1. 📋 **Sets up logging** — logs to `/tmp/user-data.log` and `/var/log/user-data.log` so you can debug if something goes wrong
+2. 📦 **Installs packages** — `git`, `docker`, `postgresql15`, `python3.11`
+3. 🐳 **Starts Docker** — enables Docker service, adds `ec2-user` to `docker` group so it can run containers without `sudo`
+4. 📥 **Clones the repo** — clones `version2` branch into `/home/ec2-user/AWS_grocery`
+5. ⏳ **Waits for RDS** — polls using `RDS_ENDPOINT` until port 5432 is reachable (RDS takes a few minutes to become available)
+6. 🗄️ **Creates DB and user** — creates `grocerymate_db` and `grocery_user` if missing, grants full privileges on the `public` schema
+7. 📊 **Imports seed data** — imports `sqlite_dump_clean.sql` if no tables exist yet (safe to rerun — skips if tables already exist)
+8. 🚀 **Builds and runs container** — builds image `grocerymate` from `backend/`, starts container with host networking and restart policy `unless-stopped`
+9. ✅ **Verifies** — runs `SELECT COUNT(*) FROM products` and logs the result to confirm data was imported
+
+---
+
+## 🛠️ Terraform Usage
+
+### 1. Prerequisites
+
+- Terraform `>= 1.5` — [download here](https://developer.hashicorp.com/terraform/downloads)
+- AWS CLI installed and credentials configured:
+
+```bash
+aws configure
+# Enter your AWS Access Key ID, Secret Access Key, region (eu-central-1), output format (json)
 ```
 
-### 🔹 PostgreSQL konfigurieren
+- An existing EC2 key pair in `eu-central-1` — create one in AWS Console → EC2 → Key Pairs
 
-Bevor du den Datenbankbenutzer erstellst, kannst du einen benutzerdefinierten Benutzernamen und ein Passwort wählen, um die Sicherheit zu erhöhen. Ersetze `<your_secure_password>` in den folgenden Befehlen durch ein starkes Passwort deiner Wahl.
+### 2. How variables are passed
 
-Datenbank und Benutzer erstellen:
+This project does **not** use a `terraform.tfvars` file to avoid accidentally committing sensitive values like passwords to Git.
 
-```sh
-psql -U postgres -c "CREATE DATABASE grocerymate_db;"
-psql -U postgres -c "CREATE USER grocery_user WITH ENCRYPTED PASSWORD '<your_secure_password>';"  # Ersetze <your_secure_password> durch ein starkes Passwort deiner Wahl
-psql -U postgres -c "ALTER USER grocery_user WITH SUPERUSER;"
+Instead, all variables are passed directly on the command line using `-var` flags.
+
+A `terraform.tfvars.example` file is provided as a reference showing all required variables:
+
+```hcl
+aws_region        = "eu-central-1"
+project_name      = "grocery-app"
+ec2_instance_type = "t3.micro"
+key_name          = "your-key-pair-name"
+my_ip             = "YOUR_PUBLIC_IP/32"
+db_password       = "your-secure-password"
+alert_email       = "your-email@example.com"
 ```
 
-### 🔹 Datenbank befüllen
+> 💡 **How to find your public IP:** Visit [https://checkip.amazonaws.com](https://checkip.amazonaws.com) and add `/32` at the end. Example: `85.214.10.5/32`
 
-```sh
-psql -U grocery_user -d grocerymate_db -f backend/app/sqlite_dump_clean.sql
+> ⚠️ **Never commit real passwords or IPs to Git.** Use the `-var` approach shown below.
+
+### 3. Initialize and Apply
+
+From the `infrastructure/` folder:
+
+```bash
+terraform init
 ```
 
-Einfügungen überprüfen:
+Then run `plan` to preview what will be created (nothing is created yet):
 
-```sh
-psql -U grocery_user -d grocerymate_db -c "SELECT * FROM users;"
-psql -U grocery_user -d grocerymate_db -c "SELECT * FROM products;"
+```powershell
+terraform plan `
+  -var="aws_region=eu-central-1" `
+  -var="project_name=grocery-app" `
+  -var="ec2_instance_type=t3.micro" `
+  -var="key_name=your-key-pair-name" `
+  -var="my_ip=YOUR_PUBLIC_IP/32" `
+  -var="db_password=your-secure-password" `
+  -var="alert_email=your-email@example.com"
 ```
 
-### 🔹 Python-Umgebung einrichten
+Then run `apply` to create all resources on AWS (type `yes` to confirm):
 
-
-Abhängigkeiten in einer aktivierten virtuellen Umgebung installieren:
-
-```sh
-cd backend
-pip install -r requirements.txt
-```
-ODER (falls pip nicht existiert)
-```sh
-pip3 install -r requirements.txt
-```
-
-### 🔹 Umgebungsvariablen setzen
-
-Eine .env-Datei erstellen:
-
-```sh
-touch .env  # macOS/Linux
-ni .env -Force  # Windows
+```powershell
+terraform apply `
+  -var="aws_region=eu-central-1" `
+  -var="project_name=grocery-app" `
+  -var="ec2_instance_type=t3.micro" `
+  -var="key_name=your-key-pair-name" `
+  -var="my_ip=YOUR_PUBLIC_IP/32" `
+  -var="db_password=your-secure-password" `
+  -var="alert_email=your-email@example.com"
 ```
 
-Einen sicheren JWT-Schlüssel generieren:
+To destroy all resources:
 
-```sh
+```powershell
+terraform destroy `
+  -var="aws_region=eu-central-1" `
+  -var="project_name=grocery-app" `
+  -var="ec2_instance_type=t3.micro" `
+  -var="key_name=your-key-pair-name" `
+  -var="my_ip=YOUR_PUBLIC_IP/32" `
+  -var="db_password=your-secure-password" `
+  -var="alert_email=your-email@example.com"
+```
+
+> 💡 The backtick `` ` `` is the PowerShell line continuation character.
+> On Linux/Mac use `\` instead.
+
+Terraform will create:
+
+- VPC, subnets, IGW, and route table
+- Security groups for EC2 and RDS
+- S3 bucket with versioning and bucket policy
+- IAM role and instance profile
+- RDS PostgreSQL instance
+- EC2 app server with user data
+- CloudWatch alarms and SNS email subscription
+
+**Outputs after apply:**
+
+| Output | Description |
+|---|---|
+| `ec2_public_ip` | Public IP of the EC2 instance |
+| `ec2_public_dns` | Public DNS of the EC2 instance |
+| `rds_endpoint` | RDS PostgreSQL hostname |
+| `rds_port` | RDS port (5432) |
+
+> 💡 **How long does it take?**
+> - EC2 is ready in ~1 minute
+> - RDS takes ~5-10 minutes to become available
+> - The full user data script takes another ~3-5 minutes
+> - Total: expect ~10-15 minutes before the app is accessible
+
+## 🌍 Accessing the Application
+
+After `terraform apply` completes and user data finishes:
+http://<ec2_public_ip>:5000
+
+
+SSH into the instance for debugging:
+
+```bash
+ssh -i /path/to/your-key.pem ec2-user@<ec2_public_dns>
+```
+
+Useful commands on EC2:
+
+```bash
+# Check if user data finished successfully
+sudo tail -n 100 /var/log/user-data.log
+
+# Check if the container is running
+docker ps
+
+# Check live app logs
+docker logs grocerymate-app --tail 100
+
+# Follow app logs in real time
+docker logs grocerymate-app -f
+```
+
+---
+
+## 🛠️ Manual Recovery Guide
+
+> This section is for when `userdata.sh` fails or the container is not running after EC2 boots.
+> Follow these steps to manually bring the app back up without recreating the infrastructure.
+
+### Step 1 — SSH into the EC2 instance
+
+```bash
+ssh -i /path/to/your-key.pem ec2-user@<ec2_public_dns>
+```
+
+### Step 2 — Check the boot log for errors
+
+```bash
+sudo cat /var/log/user-data.log
+```
+
+Look for any `ERROR` lines or where the script stopped. This tells you exactly which step failed.
+
+### Step 3 — Check if Docker is running
+
+```bash
+sudo systemctl status docker
+```
+
+If Docker is not running:
+
+```bash
+sudo systemctl start docker
+sudo systemctl enable docker
+```
+
+### Step 4 — Check if the repo was cloned
+
+```bash
+ls /home/ec2-user/AWS_grocery/backend/
+```
+
+If the folder is missing or empty, clone it manually:
+
+```bash
+cd /home/ec2-user
+git clone --branch version2 https://github.com/Amerelsabbagh/AWS_grocery.git
+```
+
+### Step 5 — Build the Docker image manually
+
+```bash
+cd /home/ec2-user/AWS_grocery/backend
+docker build -t grocerymate .
+```
+
+> 💡 This reads the `Dockerfile` in `backend/` and builds the application image. It installs all Python dependencies. This takes 2-3 minutes the first time.
+
+### Step 6 — Set environment variables
+
+```bash
+export RDS_ENDPOINT="your-rds-endpoint.eu-central-1.rds.amazonaws.com"
+export APP_DB_USER="grocery_user"
+export APP_DB_PASSWORD="grocery_test"
+export APP_DB_NAME="grocerymate_db"
+```
+
+> 💡 Get the RDS endpoint from Terraform output:
+> ```bash
+> terraform output rds_endpoint
+> ```
+
+### Step 7 — Run the Docker container manually
+
+```bash
+docker run -d \
+  --name grocerymate-app \
+  --network host \
+  --restart unless-stopped \
+  -e S3_BUCKET_NAME=grocerymate-avatars-70223957 \
+  -e S3_REGION=eu-central-1 \
+  -e USE_S3_STORAGE=true \
+  -e POSTGRES_USER="${APP_DB_USER}" \
+  -e POSTGRES_PASSWORD="${APP_DB_PASSWORD}" \
+  -e POSTGRES_DB="${APP_DB_NAME}" \
+  -e POSTGRES_HOST="${RDS_ENDPOINT}" \
+  -e POSTGRES_URI="postgresql://${APP_DB_USER}:${APP_DB_PASSWORD}@${RDS_ENDPOINT}:5432/${APP_DB_NAME}?sslmode=require" \
+  grocerymate
+```
+
+> 💡 **What do these flags mean?**
+> - `-d` — run in background (detached mode)
+> - `--name grocerymate-app` — give the container a name so you can reference it
+> 
+
+### 🔹 How `.env` variables work in AWS vs local development
+
+When running the app **locally**, you create a `.env` file with your database connection details
+and the app reads from it directly.
+
+When running the app **on AWS**, there is no `.env` file. Instead, Terraform injects all the
+same values as Docker environment variables through `userdata.sh` at boot time.
+
+Here is how each `.env` variable maps to the AWS deployment:
+
+| Local `.env` variable | AWS value injected by Terraform |
+|---|---|
+| `JWT_SECRET_KEY` | Generated once and hardcoded in `userdata.sh` or passed as a `-var` |
+| `POSTGRES_USER` | `grocery_user` (created by `userdata.sh` in RDS) |
+| `POSTGRES_PASSWORD` | `grocery_test` (set by `userdata.sh` in RDS) |
+| `POSTGRES_DB` | `grocerymate_db` (created by `userdata.sh` in RDS) |
+| `POSTGRES_HOST` | RDS endpoint — injected from `${RDS_ENDPOINT}` Terraform output |
+| `POSTGRES_URI` | Full connection string built from the above values |
+
+> 💡 **Key difference:**
+> Locally you set `POSTGRES_HOST=localhost` because the database runs on your machine.
+> On AWS you set `POSTGRES_HOST=<rds-endpoint>` because the database runs on a separate
+> managed RDS instance inside the private subnet. Terraform passes this value automatically
+> so you never need to copy/paste the RDS endpoint manually.
+
+### 🔹 How to generate a JWT secret key
+
+If you need to generate a secure JWT key (for example when running locally or adding it
+as a Terraform variable), use:
+
+```bash
 python3 -c "import secrets; print(secrets.token_hex(32))"
 ```
 
-.env-Datei aktualisieren:
+On AWS, this value is passed to the Docker container via the `-e JWT_SECRET_KEY=...` flag
+in the `docker run` command inside `userdata.sh`.
 
-```sh
-nano .env
+### 🔹 Full environment variable reference for the Docker container
+
+When running manually on EC2 (see Manual Recovery Guide), the full `docker run` command
+must include all of these:
+
+```bash
+docker run -d \
+  --name grocerymate-app \
+  --network host \
+  --restart unless-stopped \
+  -e JWT_SECRET_KEY="your-generated-jwt-key" \
+  -e POSTGRES_USER="grocery_user" \
+  -e POSTGRES_PASSWORD="grocery_test" \
+  -e POSTGRES_DB="grocerymate_db" \
+  -e POSTGRES_HOST="your-rds-endpoint.eu-central-1.rds.amazonaws.com" \
+  -e POSTGRES_URI="postgresql://grocery_user:grocery_test@your-rds-endpoint.eu-central-1.rds.amazonaws.com:5432/grocerymate_db?sslmode=require" \
+  -e S3_BUCKET_NAME="grocerymate-avatars-70223957" \
+  -e S3_REGION="eu-central-1" \
+  -e USE_S3_STORAGE="true" \
+  grocerymate
 ```
 
-Fülle die folgenden Informationen aus (stelle sicher, dass du die Platzhalter ersetzt):
-
-```ini
-JWT_SECRET_KEY=<your_generated_key>
-POSTGRES_USER=grocery_user
-POSTGRES_PASSWORD=<your_secure_password>
-POSTGRES_DB=grocerymate_db
-POSTGRES_HOST=localhost
-POSTGRES_URI=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}
-```
-
-### 🔹 Anwendung starten
-
-```sh
-python3 run.py
-```
-
-## 📖 Benutzung
-
-- Greife auf die Anwendung unter [http://localhost:5000](http://localhost:5000) zu
-- Registriere dich oder melde dich bei deinem Konto an
-- Durchsuche und finde Produkte
-- Verwalte Favoriten und den Warenkorb
-- Durchlaufe den Checkout-Prozess
-
-## 🤝 Mitwirken
-
-Beiträge zu diesem Projekt sind willkommen! Bitte folge diesen Schritten:
-
-1. Forke das Repository.
-2. Erstelle einen neuen Feature-Branch (`feature/your-feature`).
-3. Implementiere deine Änderungen und committe sie.
-4. Pushe deinen Branch und erstelle einen Pull-Request.
-
-## 📜 Lizenz
-
-Dieses Projekt ist unter der MIT-Lizenz lizenziert.
-
-
-
-
+> 💡 Get your RDS endpoint from Terraform output:
+> ```bash
+> terraform output rds_endpoint
+> ```
